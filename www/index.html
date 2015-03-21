@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>GreenCoinX</title>
+	<!-- Sets initial viewport load and disables zooming  -->
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+
+	<!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<!-- Include the compiled Ratchet CSS -->
+
+	<link href="css/ratchet.css" rel="stylesheet">
+	<link href="css/index.css" rel="stylesheet">
+	<script>
+		if( navigator.userAgent.match(/Android/i)){
+		document.write('<link href="css/ratchet-theme-android.css"  rel="stylesheet">');
+		}
+		else if( navigator.userAgent.match(/webOS/i)){
+		document.write('<link href="css/ratchet-theme-android.css"  rel="stylesheet">');
+		}
+		else if( navigator.userAgent.match(/iPhone/i)){
+		document.write('<link href="css/ratchet-theme-ios.css"  rel="stylesheet">');
+		}
+		else if( navigator.userAgent.match(/iPad/i)){
+		document.write('<link href="css/ratchet-theme-ios.css"  rel="stylesheet">');
+		}
+		else if( navigator.userAgent.match(/iPod/i)){
+		document.write('<link href="css/ratchet-theme-ios.css"  rel="stylesheet">');
+		}
+		else if( navigator.userAgent.match(/BlackBerry/i)){
+		document.write('<link href="css/ratchet-theme-android.css"  rel="stylesheet">');
+		}
+		else if( navigator.userAgent.match(/Windows Phone/i)){
+		document.write('<link href="css/ratchet-theme-android.css"  rel="stylesheet">');
+		}else{
+		document.write('<link href="css/ratchet-theme-android.css"  rel="stylesheet">');
+		}
+	</script>
+	<!-- Include the compiled Ratchet JS -->
+	<script src="js/ratchet.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	</head>
+	<body>
+
+	<!-- Make sure all your bars are the first things in your <body> -->
+		<header class="bar bar-nav" style="background-color:#111;padding:5px">
+			<h1 class="title"><a class="navbar-brand" href="/"><img src="img/greencoin.png" alt="GreenCoinX">&nbsp;<sup style="color:red;font-weight:bold">XGC</sup></a></h1>
+		</header>
+		<div class="bar bar-footer">
+			<a class="icon icon-compose pull-right" href="#composeModal"></a>
+			<small class="updated-text">Updated just now</small>
+		</div>
+		<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
+		<div class="content">
+		
+		</div>
+		
+
+
+	</body>
+
+</html>

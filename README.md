@@ -1,0 +1,2 @@
+# XGC.mobile
+GreenCoinX - Mobile

@@ -13,7 +13,6 @@
 	<!-- Include the compiled Ratchet CSS -->
 
 	<link href="css/ratchet.css" rel="stylesheet">
-	<link href="css/index.css" rel="stylesheet">
 	<script>
 		if( navigator.userAgent.match(/Android/i)){
 		document.write('<link href="css/ratchet-theme-android.css"  rel="stylesheet">');
@@ -39,27 +38,46 @@
 		document.write('<link href="css/ratchet-theme-android.css"  rel="stylesheet">');
 		}
 	</script>
+	<link href="css/index.css" rel="stylesheet">
 	<!-- Include the compiled Ratchet JS -->
+	<script type="text/javascript" src="js/jquery.js"></script>	
 	<script src="js/ratchet.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
 	</head>
 	<body>
 
 	<!-- Make sure all your bars are the first things in your <body> -->
-		<header class="bar bar-nav" style="background-color:#111;padding:5px">
+		<header class="bar bar-nav" style="background-color:#729772;padding:5px">
 			<h1 class="title"><a class="navbar-brand" href="/"><img src="img/greencoin.png" alt="GreenCoinX">&nbsp;<sup style="color:red;font-weight:bold">XGC</sup></a></h1>
 		</header>
 		<div class="bar bar-footer">
-			<a class="icon icon-compose pull-right" href="#composeModal"></a>
-			<small class="updated-text">Updated just now!</small>
+			<nav class="bar-tab">
+				<a class="tab-item active" href="#" onclick="app.index();">
+						<span class="icon icon-home"></span>
+						<span class="tab-label">Account</span>
+				</a>
+				<a class="tab-item" href="#" onclick="app.contact();">
+						<span class="icon icon-person"></span>
+						<span class="tab-label">Contacts</span>
+				</a>
+				<a class="tab-item" href="#" onclick="app.send();">
+						<span class="icon icon-up-nav"></span>
+						<span class="tab-label">Send</span>
+				</a>
+				<a class="tab-item" href="#" onclick="app.receive();">
+						<span class="icon icon-download"></span>
+						<span class="tab-label">Receive</span>
+				</a>
+				<a class="tab-item" href="#" onclick="app.settings();">
+						<span class="icon icon-gear"></span>
+						<span class="tab-label">Settings</span>
+				</a>
+			</nav>
 		</div>
 		<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
-		<div class="content">
+		<div class="content" id="content">
 
 		</div>
-		
-
-
 	</body>
-
+	<script type="text/javascript">app.index();</script>
 </html>

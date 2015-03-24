@@ -88,7 +88,19 @@
 	<script type="text/javascript" src="http://l2.io/ip.js?var=MyIP"></script>
 	<script>
 	var storage = "XGC";
-	alert(MyIP);
+	//alert(MyIP);
+	
 	localStorage.setItem(storage+'.settings.IP',MyIP);
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+		localStorage.setItem(storage+'.settings.latitude',position.coords.latitude);
+		localStorage.setItem(storage+'.settings.longitude',position.coords.longitude);
+	});
+	}
+	networkinterface.getIPAddress(function (ip) { alert(ip); });
+	//alert(localStorage[storage+'.settings.latitude']);
+	//alert(localStorage[storage+'.settings.longitude']);
+	
+	
 	</script>
 </html>

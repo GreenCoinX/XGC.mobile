@@ -91,9 +91,10 @@ initialize: function() {
 	settings: function(){
 			html = '<div class="content-padded"> \
 			<h1>Settings</h1> \
-			<a href="#" class="btn btn-outlined btn-block" onclick="app.identification();">Identification!</a> \
+			<a href="#" class="btn btn-outlined btn-block" onclick="app.identification();">Identification</a> \
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.wallet();">Wallet</a> \
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.remove();">Remove</a> \
+			<span class="btn btn-outlined btn-block">IP: '+MyIP+'</span>\
 			</div> \
 			';
 			

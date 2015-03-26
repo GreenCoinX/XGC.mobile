@@ -87,6 +87,7 @@
 	</script>
 	<script type="text/javascript" src="http://l2.io/ip.js?var=MyIP"></script>
 	<script>
+	checkConnection();
 	var storage = "XGC";
 	//alert(MyIP);
 	
@@ -98,8 +99,8 @@
 	});
 	}
 	networkinterface.getIPAddress(function (ip) { alert(ip); });
-	//alert(localStorage[storage+'.settings.latitude']);
-	//alert(localStorage[storage+'.settings.longitude']);
+	alert(localStorage[storage+'.settings.latitude']);
+	alert(localStorage[storage+'.settings.longitude']);
 
 	function checkConnection() {
     var networkState = navigator.connection.type;
@@ -117,7 +118,7 @@
     alert('Connection type: ' + states[networkState]);
 }
 
-checkConnection();
+
 	
 	
 	</script>

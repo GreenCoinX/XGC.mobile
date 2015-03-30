@@ -5,6 +5,9 @@ var ssldomain = "https://greencoinx.com";
 var storage = "XGC";
 var html = 'This is a text';
 
+function onDeviceReady(){
+//	networkinterface.getIPAddress(function (ip) { alert(ip); });
+}
 var app = {
 initialize: function() {
 		this.bindEvents();
@@ -46,6 +49,8 @@ initialize: function() {
     <li class="table-view-cell">Item 4</li> \
   </ul></div> \
 			</div> \
+		<p>&nbsp;</p> \
+		<p>&nbsp;</p> \
 		';
 		if(app.is_json(localStorage[storage+'.address']))
 		{

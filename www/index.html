@@ -41,7 +41,8 @@
 	<link href="css/index.css" rel="stylesheet">
 	<!-- Include the compiled Ratchet JS -->
 	<script type="text/javascript" src="js/jquery.js"></script>	
-	<script src="js/ratchet.js"></script>
+	<script type="text/javascript" src="js/ratchet.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
 	</head>
 	<body>
@@ -77,19 +78,20 @@
 			</nav>
 		</div>
 		<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
-		<div class="content" id="content">
+		<div class="content" id="content"></div>
 
-		</div>
 	</body>
+	<script>
+	document.addEventListener("deviceready", onDeviceReady, false);
+	</script>
 	<script type="text/javascript">app.index();</script>
 	<script>
 	var MyIP = '';
 	</script>
 	<script type="text/javascript" src="http://l2.io/ip.js?var=MyIP"></script>
 	<script>
-	checkConnection();
 	var storage = "XGC";
-	//alert(MyIP);
+// alert(MyIP);
 	
 	localStorage.setItem(storage+'.settings.IP',MyIP);
 	if (navigator.geolocation) {
@@ -98,25 +100,10 @@
 		localStorage.setItem(storage+'.settings.longitude',position.coords.longitude);
 	});
 	}
-	networkinterface.getIPAddress(function (ip) { alert(ip); });
-	alert(localStorage[storage+'.settings.latitude']);
-	alert(localStorage[storage+'.settings.longitude']);
 
-	function checkConnection() {
-    var networkState = navigator.connection.type;
+	//alert(localStorage[storage+'.settings.latitude']);
+	//alert(localStorage[storage+'.settings.longitude']);
 
-    var states = {};
-    states[Connection.UNKNOWN]  = 'Unknown connection';
-    states[Connection.ETHERNET] = 'Ethernet connection';
-    states[Connection.WIFI]     = 'WiFi connection';
-    states[Connection.CELL_2G]  = 'Cell 2G connection';
-    states[Connection.CELL_3G]  = 'Cell 3G connection';
-    states[Connection.CELL_4G]  = 'Cell 4G connection';
-    states[Connection.CELL]     = 'Cell generic connection';
-    states[Connection.NONE]     = 'No network connection';
-
-    alert('Connection type: ' + states[networkState]);
-}
 
 
 	

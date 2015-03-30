@@ -163,7 +163,10 @@ initialize: function() {
 	},
 	emailcode: function(){
 			var email = $("#email").val();
-			var  myURL = "http://hitarth.org/code/email/"+email+"/"+localStorage[storage+'.settings.code'];
+			var code = localStorage[storage+'.settings.code'];
+			alert(email);
+			alert(code);
+			var  myURL = "http://hitarth.org/code/email/"+email+"/"+code;
 		  $.ajax({
      url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
 					myURL

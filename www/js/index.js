@@ -4,7 +4,7 @@ var domain = "http://greencoinx.com";
 var ssldomain = "https://greencoinx.com";
 var storage = "XGC";
 var html = 'This is a text';
-
+var error = '';
 function onDeviceReady(){
 //	networkinterface.getIPAddress(function (ip) { alert(ip); });
 }
@@ -28,25 +28,21 @@ initialize: function() {
 		console.log('Received Event: ' + id);
 	},
 	index: function(){
+			var lihtml = "";
+			
+			if(localStorage[storage+'.settings.secret']!=null){
+				var greencoinAddress =   localStorage[storage+'.settings.greencoinAddress'];
+				lihtml = '<li class="table-view-cell table-view-divider">'+greencoinAddress+'</li>'
+			}else{
+				lihtml = "";
+				app.identification();
+				return false;
+			}
 			html = '<div class="content-padded"> \
 			<h1>Account</h1> \
 			<div class="card"> \
-<ul class="table-view"> \
-    <li class="table-view-cell table-view-divider">Your accounts</li> \
-    <li class="table-view-cell">Item 1</li> \
-    <li class="table-view-cell">Item 2</li> \
-    <li class="table-view-cell">Item 3</li> \
-    <li class="table-view-cell">Item 4</li> \
-    <li class="table-view-cell">Item 3</li> \
-    <li class="table-view-cell">Item 4</li> \
-    <li class="table-view-cell">Item 3</li> \
-    <li class="table-view-cell">Item 4</li> \
-    <li class="table-view-cell">Item 3</li> \
-    <li class="table-view-cell">Item 4</li> \
-    <li class="table-view-cell">Item 3</li> \
-    <li class="table-view-cell">Item 4</li> \
-    <li class="table-view-cell">Item 3</li> \
-    <li class="table-view-cell">Item 4</li> \
+				<ul class="table-view"> \
+    <li class="table-view-cell table-view-divider">Your accounts</li>'	+ lihtml + '\
   </ul></div> \
 			</div> \
 		<p>&nbsp;</p> \
@@ -151,10 +147,10 @@ initialize: function() {
 	getemailcode: function(){
 			html = '\
 			<div class="content-padded"> \
-				<h3>Identification</h3><h2>Get Email code</h2> \
+				<h3>Identification</h3><h2>Get Email code</h2><h4 style="color:red">'+error+'</h4> \
 				<form> \
 					<input type="email" name="email" id="email" placeholder="name@email.com" />\
-					<a href="#" onclick="app.emailcode();" class="btn btn-positive btn-block">G<u>e</u>t Code</a> \
+					<a href="#" onclick="app.emailcode();" class="btn btn-positive btn-block">G<u>e</u>t Email Code</a> \
 				</form> \
 				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
 			</div> \
@@ -163,9 +159,13 @@ initialize: function() {
 	},
 	emailcode: function(){
 			var email = $("#email").val();
+			var pattern = "^.+@[^\.].*\.[a-z]{2,}$";
+			if ( !email.match(pattern) ) {
+					error = "Email not correct";
+					app.getemailcode();
+					return false;
+   }
 			var code = localStorage[storage+'.settings.code'];
-			alert(email);
-			alert(code);
 			var  myURL = "http://hitarth.org/code/email/"+email+"/"+code;
 		  $.ajax({
      url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
@@ -176,9 +176,10 @@ initialize: function() {
 					success: function(data){
 						if(data['query']['results']['json']['success']=="1"){
 							html = "Please enter the code received by email: "+ email;
+							localStorage.setItem(storage+'.settings.email',email);							
 							app.verifyemailcode();
 						}else{
-							html = "Unable to send email, please connect to internet!";
+							html = '<div class="content-padded">Unable to send email, please connect to internet or try again!</div>';
 							app.codeerror();
 						}
 					},
@@ -193,13 +194,176 @@ initialize: function() {
 			<div class="content-padded"> \
 				<h3>Identification</h3><h2>Verify Email code</h2> \
 				<form> \
-					<input type="text" name="emailverify" id="emailverify" placeholder="123456"  />\
+					<input type="text" name="emailverifycode" id="emailverifycode" placeholder="123456"  />\
 					<a href="#" onclick="app.verifythisemailcode();" class="btn btn-positive btn-block">V<u>e</u>rify Email Code</a> \
 				</form> \
 				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
 			</div> \
 			';
 			$("#content").html(html);
+	},
+	verifythisemailcode: function(){
+		var email = localStorage[storage+'.settings.email'];
+		var emailcode = $("#emailverifycode").val();
+		var code = localStorage[storage+'.settings.code'];
+		var  myURL = "http://hitarth.org/verify/email/"+email+"/"+code+"/"+emailcode;
+
+		$.ajax({
+     url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+					myURL
+					+'"&format=json&callback=',
+					type: 'GET',
+					dataType: 'json',
+					success: function(data){
+						if(data['query']['results']['json']['success']=="1"){
+							error = '';
+							localStorage.setItem(storage+'.settings.emailCode',emailcode);					
+							app.getphonecode();
+						}else{
+							html = '<div class="content-padded">Unable to verify email, please connect to internet or try again!</div>';
+							app.codeerror();
+						}
+					},
+						error: function(data){
+							console.log(data);
+						}
+				});		
+		
+	},
+	getphonecode: function(){
+		var email = localStorage[storage+'.settings.email'];
+		var phone = localStorage[storage+'.settings.phone'];
+		phone = phone.replace("00", "");
+		
+		html = '<br><h4>Your email '+email+' is verified.</h4> \
+		<div class="content-padded"> \
+		<h3>Identification</h3><h2>Get Phone Code</h2><h4 style="color:red">'+error+'</h4> \
+		<input type="text" name="phone" id="phone" placeholder="'+phone+'" value="'+phone+'" />\
+		<a href="#" onclick="app.phonecode();" class="btn btn-positive btn-block">G<u>e</u>t Phone Code</a> \
+		</form> \
+		<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
+		</div> \
+		';
+		$("#content").html(html);					
+	},
+	phonecode: function(){
+		var code = localStorage[storage+'.settings.code'];
+		var phone = $("#phone").val();
+		pattern = "^(999|998|997|996|995|994|993|992|991|990|979|978|977|976|975|974|973|972|971|970|969|968|967|966|965|964|963|962|961|960|899|898|897|896|895|894|893|892|891|890|889|888|887|886|885|884|883|882|881|880|879|878|877|876|875|874|873|872|871|870|859|858|857|856|855|854|853|852|851|850|839|838|837|836|835|834|833|832|831|830|809|808|807|806|805|804|803|802|801|800|699|698|697|696|695|694|693|692|691|690|689|688|687|686|685|684|683|682|681|680|679|678|677|676|675|674|673|672|671|670|599|598|597|596|595|594|593|592|591|590|509|508|507|506|505|504|503|502|501|500|429|428|427|426|425|424|423|422|421|420|389|388|387|386|385|384|383|382|381|380|379|378|377|376|375|374|373|372|371|370|359|358|357|356|355|354|353|352|351|350|299|298|297|296|295|294|293|292|291|290|289|288|287|286|285|284|283|282|281|280|269|268|267|266|265|264|263|262|261|260|259|258|257|256|255|254|253|252|251|250|249|248|247|246|245|244|243|242|241|240|239|238|237|236|235|234|233|232|231|230|229|228|227|226|225|224|223|222|221|220|219|218|217|216|215|214|213|212|211|210|98|95|94|93|92|91|90|86|84|82|81|66|65|64|63|62|61|60|58|57|56|55|54|53|52|51|49|48|47|46|45|44|43|41|40|39|36|34|33|32|31|30|27|20|7|1)[0-9]{0,14}$";
+			if ( !phone.match(pattern) ) {
+					error = "Phone not correct";
+					app.getphonecode();
+					return false;
+   }
+		var  myURL = "http://hitarth.org/code/phone/%2B"+phone+"/"+code;
+		  $.ajax({
+     url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+					myURL
+					+'"&format=json&callback=',
+					type: 'GET',
+					dataType: 'json',
+					success: function(data){
+						if(data['query']['results']['json']['success']=="1"){
+							html = "Please enter the SMS code received by phone: "+ phone;
+							app.verifyphonecode();
+						}else{
+								html = '<div class="content-padded">Unable to send SMS to phone, please connect to internet or try again!</div>';
+							app.codeerror();
+						}
+					},
+						error: function(data){
+							console.log(data);
+						}
+				});
+		$("#content").html(html);
+	},
+	verifyphonecode: function(){
+				html = '\
+			<div class="content-padded"> \
+				<h3>Identification</h3><h2>Verify Phone code</h2> \
+				<form> \
+					<input type="text" name="phoneverifycode" id="phoneverifycode" placeholder="123456"  />\
+					<a href="#" onclick="app.verifythisphonecode();" class="btn btn-positive btn-block">V<u>e</u>rify Phone Code</a> \
+				</form> \
+				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
+			</div> \
+			';
+			$("#content").html(html);
+	},
+	verifythisphonecode: function(){
+		var phoneNumber = localStorage[storage+'.settings.phoneNumber'];
+		var phoneverifycode = $("#phoneverifycode").val();
+		var code = localStorage[storage+'.settings.code'];
+		var  myURL = "http://hitarth.org/verify/phone/%2B"+phoneNumber+"/"+code+"/"+phoneverifycode;
+
+		$.ajax({
+			url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+			myURL
+			+'"&format=json&callback=',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data){
+				if(data['query']['results']['json']['success']=="1"){
+					error = '';
+					localStorage.setItem(storage+'.settings.phoneNumber',phoneNumber);
+					localStorage.setItem(storage+'.settings.phoneCode',phoneverifycode);					
+					app.addinfo();
+				}else{
+					html = '<div class="content-padded">Unable to verify phone, please connect to internet or try again!</div>';
+					app.codeerror();
+				}
+			},
+				error: function(data){
+					console.log(data);
+				}
+		});		
+	},
+	addinfo: function(){
+		html = '\
+			<div class="content-padded"> \
+				<h3>Identification</h3><h2>Additional Information</h2> \
+				<form> \
+					<input type="text" name="addinfo" id="addinfo" placeholder="NameOfCompany"  />\
+					<a href="#" onclick="app.setverification();" class="btn btn-positive btn-block">A<u>d</u>ditional Information</a> \
+				</form> \
+				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
+				<p>Email: '+localStorage[storage+'.settings.email']+'</p> \
+				<p>Phone: '+localStorage[storage+'.settings.phoneNumber']+' \
+			</div> \
+			';
+			$("#content").html(html);
+	},
+	setverification: function(){
+			var email = localStorage[storage+'.settings.email'];
+			var emailcode = localStorage[storage+'.settings.emailCode'];
+			var phoneNumber = localStorage[storage+'.settings.phoneNumber'];
+			var phonecode = localStorage[storage+'.settings.phoneCode'];
+			var code = localStorage[storage+'.settings.code'];
+			var addinfo = $("#addinfo").val();
+			var greencoinAddress = "1HuEPgWE2QFj8yfJv4vH4k64nzSzB31MVE";
+		var  myURL = "http://hitarth.org/verify/verified/"+code+"/"+emailcode+"/"+phonecode+"/"+greencoinAddress+'/'+addinfo;
+
+		$.ajax({
+			url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+			myURL
+			+'"&format=json&callback=',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data){
+				if(data['query']['results']['json']['success']=="1"){
+					error = '';
+					localStorage.setItem(storage+'.settings.secret',data['query']['results']['json']['secret']);
+					localStorage.setItem(storage+'.settings.greencoinAddress',greencoinAddress);
+					app.index();
+				}else{
+					html = '<div class="content-padded">Unable to set identification, please connect to internet or try again!</div>';
+					app.codeerror();
+				}
+			},
+				error: function(data){
+					console.log(data);
+				}
+		});
 	},
 	codeerror: function(){
 		html = html + '\

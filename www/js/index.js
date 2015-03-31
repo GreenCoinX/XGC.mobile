@@ -3,13 +3,12 @@
 var domain = "http://greencoinx.com";
 var ssldomain = "https://greencoinx.com";
 var storage = "XGC";
-var html = 'This is a text';
+var html = 'This is a text!';
 var error = '';
-function onDeviceReady(){
-//	networkinterface.getIPAddress(function (ip) { alert(ip); });
-}
-var app = {
-initialize: function() {
+var greencoinAddresses = new Array();
+
+var app = { // Application Constructor
+	initialize: function() {
 		this.bindEvents();
 	},
 	bindEvents: function() {
@@ -17,6 +16,9 @@ initialize: function() {
 	},
 	onDeviceReady: function() {
 		app.receivedEvent('deviceready');
+//		dropTables();
+		checkDB();
+		app.index();
 	},
 	receivedEvent: function(id) {
 		var parentElement = document.getElementById(id);
@@ -26,24 +28,17 @@ initialize: function() {
 		listeningElement.setAttribute('style', 'display:none;');
 		receivedElement.setAttribute('style', 'display:block;');
 		console.log('Received Event: ' + id);
+		
 	},
 	index: function(){
-			var lihtml = "";
-			
-			if(localStorage[storage+'.settings.secret']!=null){
-				var greencoinAddress =   localStorage[storage+'.settings.greencoinAddress'];
-				lihtml = '<li class="table-view-cell table-view-divider">'+greencoinAddress+'</li>'
-			}else{
-				lihtml = "";
-				app.identification();
-				return false;
-			}
+//			localStorage.clear();
+			readDB();
 			html = '<div class="content-padded"> \
 			<h1>Account</h1> \
-			<div class="card"> \
-				<ul class="table-view"> \
-    <li class="table-view-cell table-view-divider">Your accounts</li>'	+ lihtml + '\
-  </ul></div> \
+			<div class="card" > \
+				<ul class="table-view" id="XGCAddresses"> \
+					<li class="table-view-cell table-view-divider">Your GreenCoinX accounts</li> \
+				</ul></div> \
 			</div> \
 		<p>&nbsp;</p> \
 		<p>&nbsp;</p> \
@@ -52,8 +47,6 @@ initialize: function() {
 		{
 //			alert( $.parseJSON(localStorage[storage+'.address']).test);
 		}
-
-		
 		try{
 //			localStorage.setItem(storage+'.settings', JSON.stringify({address:''}));
 //			localStorage.removeItem(storage+'.settings');
@@ -116,6 +109,7 @@ initialize: function() {
 			$("#content").html(html);
 	},	
 	startverification: function(){
+			
 			var  myURL = "http://hitarth.org/code/index/"+MyIP;
 		  $.ajax({
      url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
@@ -264,6 +258,7 @@ initialize: function() {
 					dataType: 'json',
 					success: function(data){
 						if(data['query']['results']['json']['success']=="1"){
+							localStorage.setItem(storage+'.settings.phoneNumber',phone);							
 							html = "Please enter the SMS code received by phone: "+ phone;
 							app.verifyphonecode();
 						}else{
@@ -340,8 +335,10 @@ initialize: function() {
 			var phonecode = localStorage[storage+'.settings.phoneCode'];
 			var code = localStorage[storage+'.settings.code'];
 			var addinfo = $("#addinfo").val();
-			var greencoinAddress = "1HuEPgWE2QFj8yfJv4vH4k64nzSzB31MVE";
-		var  myURL = "http://hitarth.org/verify/verified/"+code+"/"+emailcode+"/"+phonecode+"/"+greencoinAddress+'/'+addinfo;
+			
+			var keys = btc.keys(Crypto.SHA256(email+emailcode+phoneNumber+phonecode+code+Crypto.SHA256(email+phoneNumber+code)));
+			var greencoinAddress = keys.pubkey.toString();	
+			var  myURL = "http://hitarth.org/verify/verified/"+code+"/"+emailcode+"/"+phonecode+"/"+greencoinAddress+'/'+addinfo;
 
 		$.ajax({
 			url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
@@ -353,7 +350,7 @@ initialize: function() {
 				if(data['query']['results']['json']['success']=="1"){
 					error = '';
 					localStorage.setItem(storage+'.settings.secret',data['query']['results']['json']['secret']);
-					localStorage.setItem(storage+'.settings.greencoinAddress',greencoinAddress);
+					addAddresses(greencoinAddress);			
 					app.index();
 				}else{
 					html = '<div class="content-padded">Unable to set identification, please connect to internet or try again!</div>';
@@ -411,3 +408,4 @@ initialize: function() {
 
 };
 
+app.initialize();

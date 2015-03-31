@@ -42,8 +42,17 @@
 	<!-- Include the compiled Ratchet JS -->
 	<script type="text/javascript" src="js/jquery.js"></script>	
 	<script type="text/javascript" src="js/ratchet.js"></script>
+	
 	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/html5sql.js"></script>
+	<script type="text/javascript" src="js/data.js"></script>
+	
+	<script type="text/javascript" src='js/lib/btc.js'></script>
+	<script type="text/javascript" src='js/lib/crypto.js'></script>
+	<script type="text/javascript" src='js/lib/bitcoinjs.js'></script>
+	
+	
 	</head>
 	<body>
 
@@ -78,13 +87,14 @@
 			</nav>
 		</div>
 		<!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
+		<div id="deviceready" class="blink">
+			<p class="event listening">X</p>
+			<p class="event received">GreenCoinX</p>
+		</div>
 		<div class="content" id="content"></div>
-
 	</body>
-	<script>
-	document.addEventListener("deviceready", onDeviceReady, false);
-	</script>
-	<script type="text/javascript">app.index();</script>
+	
+	
 	<script>
 	var MyIP = '';
 	</script>
@@ -104,9 +114,5 @@
 	//alert(localStorage[storage+'.settings.latitude']);
 	//alert(localStorage[storage+'.settings.longitude']);
 
-
-
-	
-	
 	</script>
 </html>

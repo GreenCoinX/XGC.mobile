@@ -38,6 +38,8 @@ var app = { // Application Constructor
 			<div class="card" > \
 				<ul class="table-view" id="XGCAddresses"> \
 					<li class="table-view-cell table-view-divider">Your GreenCoinX accounts</li> \
+					<li class="table-view-cell table-view-divider">Email: '+localStorage[storage+".settings.email"]+'</li> \
+					<li class="table-view-cell table-view-divider">Phone: +'+localStorage[storage+".settings.phoneNumber"]+'</li> \
 				</ul></div> \
 			</div> \
 		<p>&nbsp;</p> \

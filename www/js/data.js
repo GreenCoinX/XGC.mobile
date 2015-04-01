@@ -26,11 +26,10 @@ function readDB(){
 		for(var i=0; i<rowsArray.length; i++){
 			var id = rowsArray[i].id;
 			var address = rowsArray[i].address;
-			xhtml += '<li class="table-view-cell"><code><a href="#" data-id="' + id + '" onclick="ShowDetails(this);" data-name="' + address + '">' + address + '</a></code></li>';
+			xhtml += '<li class="table-view-cell"><code><a href="#" data-id="' + id + '" onclick="app.ShowDetails(this);" data-name="' + address + '">' + address + '</a></code></li>';
 		}
 		$("#XGCAddresses").append(xhtml);	
 	}, catchError);
-	
 }
 
 function dropTables(){
@@ -49,11 +48,10 @@ function addAddresses(address){
 	"INSERT INTO addresses (address) VALUES ('" + address + "');"
 	],
 	function(){
-	$("#address").val("");
+	$("#XGCAddresses").html("");
 	readDB();
 	}, catchError);
 }
-
 
 function catchError(error, statement){
 	console.error("Error: " + error.message + " when processing " + statement);

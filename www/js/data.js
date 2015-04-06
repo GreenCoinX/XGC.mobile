@@ -3,7 +3,7 @@ html5sql.openDatabase("com.greencoinx.data", "GreenCoinXAddress", 3*1024*1024);
 function checkDB(){
 	html5sql.process(
 	[
-	"CREATE TABLE if not exists addresses (id INTEGER PRIMARY KEY, address TEXT);",
+	"CREATE TABLE if not exists addresses (id INTEGER PRIMARY KEY, address TEXT, privkey TEXT);",
 	"SELECT * FROM addresses;"
 	],
 	function(transaction, results, rowsArray){
@@ -42,10 +42,10 @@ function dropTables(){
 	}, catchError);
 }
 
-function addAddresses(address){
+function addAddresses(address,privkey){
 	html5sql.process(
 	[
-	"INSERT INTO addresses (address) VALUES ('" + address + "');"
+	"INSERT INTO addresses (address,privkey) VALUES ('" + address + "','"+privkey+"');",
 	],
 	function(){
 	$("#XGCAddresses").html("");

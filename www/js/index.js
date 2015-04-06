@@ -98,8 +98,11 @@ var app = { // Application Constructor
 			html = '<div class="content-padded"> \
 			<h1>Settings</h1> \
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.identification();">Identification</a> \
+			<p>With identification and verification you can use GreenCoinX to send, receive to your contact email and phone number. </p>\
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.wallet();">Wallet</a> \
+			<p>Wallet settings help you decided transaction fees and sync to block chain.</p>\
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.remove();">Remove</a> \
+			<p>Remove all setting and identification from this mobile. <span style="color:red">DANGER: You will not be able to use any GreenCoinXs stored on this device.</span></p>\
 			<span>IP: '+MyIP+'</span><br>';
 			if(email === null || email === undefined){
 				html += '';
@@ -165,6 +168,7 @@ var app = { // Application Constructor
 				<h3>Identification</h3><h2>Get Email code</h2><h4 style="color:red">'+error+'</h4> \
 				<form> \
 					<input type="email" name="email" id="email" placeholder="name@email.com" />\
+					<p>Enter your email address. Click on "Get Email Code". You will receive an email with a six digit code, which you can enter on the next screen. </p>\
 					<a href="#" onclick="app.emailcode();" class="btn btn-positive btn-block">G<u>e</u>t Email Code</a> \
 				</form> \
 				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
@@ -205,11 +209,13 @@ var app = { // Application Constructor
 			$("#content").html(html);
 	},
 	verifyemailcode: function(){
+		var email = localStorage[storage+'.settings.email'];
 		html = '\
 			<div class="content-padded"> \
 				<h3>Identification</h3><h2>Verify Email code</h2> \
 				<form> \
 					<input type="text" name="emailverifycode" id="emailverifycode" placeholder="123456"  />\
+					<p>Check your email: '+email+'. It may be in Inbox or Spam folder. Enter the six digit code you received and verify.</p>\
 					<a href="#" onclick="app.verifythisemailcode();" class="btn btn-positive btn-block">V<u>e</u>rify Email Code</a> \
 				</form> \
 				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
@@ -253,7 +259,8 @@ var app = { // Application Constructor
 		html = '<br><h4>Your email '+email+' is verified.</h4> \
 		<div class="content-padded"> \
 		<h3>Identification</h3><h2>Get Phone Code</h2><h4 style="color:red">'+error+'</h4> \
-		<input type="text" name="phone" id="phone" placeholder="'+phone+'" value="'+phone+'" />\
+		<input type="text" name="phone" id="phone" placeholder="'+phone+'8887776666" value="'+phone+'" />\
+		<p>Enter phone number where you can receive SMS. Include only numbers starting with international code ['+phone+'8887776666] where '+phone+' is country code for international dialing.</p>\
 		<a href="#" onclick="app.phonecode();" class="btn btn-positive btn-block">G<u>e</u>t Phone Code</a> \
 		</form> \
 		<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
@@ -294,11 +301,13 @@ var app = { // Application Constructor
 		$("#content").html(html);
 	},
 	verifyphonecode: function(){
+			var phone = localStorage[storage+'.settings.phone'];
 				html = '\
 			<div class="content-padded"> \
 				<h3>Identification</h3><h2>Verify Phone code</h2> \
 				<form> \
 					<input type="text" name="phoneverifycode" id="phoneverifycode" placeholder="123456"  />\
+					<p>Enter the code received on phone: '+phone+', and click verify.</p>\
 					<a href="#" onclick="app.verifythisphonecode();" class="btn btn-positive btn-block">V<u>e</u>rify Phone Code</a> \
 				</form> \
 				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
@@ -341,6 +350,7 @@ var app = { // Application Constructor
 				<form> \
 					<input type="text" name="addinfo" id="addinfo" placeholder="NameOfCompany"  />\
 					<a href="#" onclick="app.setverification();" class="btn btn-positive btn-block">A<u>d</u>ditional Information</a> \
+					<p>Add any additional information you would like to enter. No SPACES, only letters and numbers.</p>\
 				</form> \
 				<p>Connected with IP: ' + localStorage[storage+'.settings.IP'] + ', through ' + localStorage[storage+'.settings.org'] + ', '+ localStorage[storage+'.settings.city']+' (' + localStorage[storage+'.settings.latlon']+') ' + localStorage[storage+'.settings.country'] +'. Phone prefix: ' + localStorage[storage+'.settings.phone'] + '</p>\
 				<p>Email: '+localStorage[storage+'.settings.email']+'</p> \
@@ -359,6 +369,7 @@ var app = { // Application Constructor
 			
 			var keys = btc.keys(Crypto.SHA256(email+emailcode+phoneNumber+phonecode+code+Crypto.SHA256(email+phoneNumber+code)));
 			var greencoinAddress = keys.pubkey.toString();	
+			var privkey = keys.privkey.toString();
 			var  myURL = "http://hitarth.org/verify/verified/"+code+"/"+emailcode+"/"+phonecode+"/"+greencoinAddress+'/'+addinfo;
 
 		$.ajax({
@@ -371,7 +382,7 @@ var app = { // Application Constructor
 				if(data['query']['results']['json']['success']=="1"){
 					error = '';
 					localStorage.setItem(storage+'.settings.secret',data['query']['results']['json']['secret']);
-					addAddresses(greencoinAddress);			
+					addAddresses(greencoinAddress,privkey);			
 					app.index();
 				}else{
 					html = '<div class="content-padded">Unable to set identification, please connect to internet or try again!</div>';

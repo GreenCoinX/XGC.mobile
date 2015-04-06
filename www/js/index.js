@@ -33,14 +33,21 @@ var app = { // Application Constructor
 	index: function(){
 //			localStorage.clear();
 			readDB();
+			email = localStorage[storage+".settings.email"];
+			phone = localStorage[storage+".settings.phoneNumber"];
 			html = '<div class="content-padded"> \
 			<h1>Account</h1> \
 			<div class="card" > \
 				<ul class="table-view" id="XGCAddresses"> \
-					<li class="table-view-cell table-view-divider">Your GreenCoinX accounts</li> \
-					<li class="table-view-cell table-view-divider">Email: '+localStorage[storage+".settings.email"]+'</li> \
-					<li class="table-view-cell table-view-divider">Phone: +'+localStorage[storage+".settings.phoneNumber"]+'</li> \
-				</ul></div> \
+					<li class="table-view-cell table-view-divider">Your GreenCoinX accounts</li>';
+			if(email === undefined || email === null){
+				html += '<li class="table-view-cell" ><h4>Your wallet is unidentified!</h4></li>';
+				html += '<li class="table-view-cell" ><h5>Click on Settings -> Identification and verify your email and phone to use GreenCoinX.</h5></li>';
+			}else{
+				html +=	'<li class="table-view-cell table-view-divider">Email: '+email+'</li> \
+					<li class="table-view-cell table-view-divider">Phone: +'+phone+'</li>';
+			}
+				html+= '</ul></div> \
 			</div> \
 		<p>&nbsp;</p> \
 		<p>&nbsp;</p> \
@@ -85,12 +92,25 @@ var app = { // Application Constructor
 			$("#content").html(html);
 	},
 	settings: function(){
+			var email = localStorage[storage+".settings.email"];
+			var phone = localStorage[storage+".settings.phoneNumber"];
+
 			html = '<div class="content-padded"> \
 			<h1>Settings</h1> \
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.identification();">Identification</a> \
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.wallet();">Wallet</a> \
 			<a href="#" class="btn btn-outlined btn-block" onclick="app.remove();">Remove</a> \
-			<span class="btn btn-outlined btn-block">IP: '+MyIP+'</span>\
+			<span>IP: '+MyIP+'</span><br>';
+			if(email === null || email === undefined){
+				html += '';
+			}else{
+				html += '<h6>Your wallet is identified.</h6>\
+				<p>email: '+email+'<br>\
+				phone: +'+phone+'</p>\
+				';
+				
+			}
+				html += '\
 			</div> \
 			';
 			
@@ -111,7 +131,6 @@ var app = { // Application Constructor
 			$("#content").html(html);
 	},	
 	startverification: function(){
-			
 			var  myURL = "http://hitarth.org/code/index/"+MyIP;
 		  $.ajax({
      url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
@@ -395,6 +414,8 @@ var app = { // Application Constructor
 	},	
 	removed: function(){
 		localStorage.removeItem(storage);
+		localStorage.clear();
+		dropTables();
 		app.settings();
 	},
 	is_json: function(string)

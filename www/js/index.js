@@ -69,22 +69,6 @@ var app = { // Application Constructor
 			$("#content").html(html);
 	},
 	contact: function(){
-		alert("Hi");
-		$(document).on("pageshow", function () {
-    $.mobile.loading("hide");
-    $("body").removeClass('ui-disabled');
-    if ($("#contactsList").length == 1) {
-        $("body").addClass('ui-disabled').css("background", "#000");
-        $.mobile.loading("show");
-        var options = new ContactFindOptions();
-        options.filter = "";
-        options.multiple = true;
-        var filter = ["displayName", "phoneNumbers","emails"];
-        navigator.contacts.find(filter, onSuccessContact, onErrorContact, options);
-    } else if ($("#addContact").length == 1) {
-        bindAddContactEvents();
-    }
-		});		
 		
 		html = '<div class="content-padded"> \
 			<h1>Contact</h1> \
@@ -92,6 +76,15 @@ var app = { // Application Constructor
 			</div> \
 			';
 		$("#content").html(html);
+    alert($("#contactsList").length);
+    $("body").removeClass('ui-disabled');
+    if ($("#contactsList").length == 1) {
+        var options = new ContactFindOptions();
+        options.filter = "";
+        options.multiple = true;
+        var filter = ["displayName", "phoneNumbers","emails"];
+        navigator.contacts.find(filter, onSuccessContact, onErrorContact, options);
+    } 
 	},
 	send: function(){
 		html = '<div class="content-padded"> \
@@ -507,33 +500,5 @@ function onErrorContact(contactError) {
     $.mobile.loading("hide");
     $("body").removeClass('ui-disabled');
 }
-
-function bindAddContactEvents() {
-    $("#addContact").on("click", function () {
-        var name = $.trim($("#name").val()),
-            number = $.trim($("#number").val());
-
-        if (name.length == 0) {
-            alert("Please enter a valid Name");
-            return false;
-        }
-
-        if (number.length == 0) {
-            alert("Please enter a valid Number");
-            return false;
-        }
-
-        var contact = navigator.contacts.create();
-        contact.displayName = name;
-        contact.nickname = name;
-
-        var phoneNumbers = [];
-        phoneNumbers[0] = new ContactField('mobile', number, true);
-        contact.phoneNumbers = phoneNumbers;
-
-        contact.save(createSuccess, createError);
-    });
-}
-
 
 app.initialize();

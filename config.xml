@@ -6,14 +6,14 @@
         id        = "com.greencoinx.mobile"
         version   = "1.0.0">
 
-    <name>GreenCoinX</name>
+    <name>GreenCoinX-Mobile</name>
 
     <description>
         GreenCoinX - a fully identified, digital virtual crypto national currency
     </description>
 
     <author href="http://greencoinx.com" email="admin@greencoinx.com">
-		GreenCoinX
+		GreenCoinX-Nilam Doctor
     </author>
 
     <!--

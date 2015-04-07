@@ -71,19 +71,34 @@ var app = { // Application Constructor
 	contact: function(){
 		
 		html = '<div class="content-padded"> \
-			<h1>Contact</h1> \
-			<div id="contactsList"></div>\
+			<h1>Contacts</h1> \
+			<h2>Search</h2> \
+			<form>\
+			<ul class="table-view">\
+				<li class="table-view-cell"><input type="search" name="emailSearch" id="emailSearch" placeholder="name@email.com" />\
+					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchEmail();"><span class="icon icon-search"></span> Go</a>\
+				</li>\
+				<li class="table-view-cell"><input type="search" name="phoneSearch" id="phoneSearch" placeholder="918887776666" /> \
+					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchEmail();"><span class="icon icon-search"></span> Go</a>\
+				</li>\
+				<li class="table-view-cell"><input type="search" name="nameSearch" id="nameSearch" placeholder="John " /> \
+					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchEmail();"><span class="icon icon-search"></span> Go</a>\
+				</li>\
+			</ul>\
+				<div id="contactsList"></div>\
 			</div> \
 			';
 		$("#content").html(html);
-    alert($("#contactsList").length);
-    $("body").removeClass('ui-disabled');
-    if ($("#contactsList").length == 1) {
-        var options = new ContactFindOptions();
-        options.filter = "";
-        options.multiple = true;
-        var filter = ["displayName", "phoneNumbers","emails"];
-        navigator.contacts.find(filter, onSuccessContact, onErrorContact, options);
+	},
+	SearchEmail:function(){
+			var email = $("#emailSearch").val();
+			alert(email);
+		  if ($("#contactsList").length == 1) {
+					var options = new ContactFindOptions();
+					options.filter = email;
+					options.multiple = true;
+					var filter = ["displayName", "name", "phoneNumbers", "emails"];
+					navigator.contacts.find(filter, onSuccessContact, onErrorContact, options);
     } 
 	},
 	send: function(){
@@ -491,14 +506,10 @@ function onSuccessContact(contacts) {
     $("#contactsList").html(html);
     $("#contactsList").listview().listview('refresh');
     $(".innerlsv").listview().listview('refresh');
-    $.mobile.loading("hide");
-    $("body").removeClass('ui-disabled');
 }
 
 function onErrorContact(contactError) {
     alert('Oops Something went wrong!');
-    $.mobile.loading("hide");
-    $("body").removeClass('ui-disabled');
 }
 
 app.initialize();

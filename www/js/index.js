@@ -69,7 +69,6 @@ var app = { // Application Constructor
 			$("#content").html(html);
 	},
 	contact: function(){
-		
 		html = '<div class="content-padded"> \
 			<h1>Contacts</h1> \
 			<h2>Search</h2> \
@@ -79,28 +78,55 @@ var app = { // Application Constructor
 					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchEmail();"><span class="icon icon-search"></span> Go</a>\
 				</li>\
 				<li class="table-view-cell"><input type="search" name="phoneSearch" id="phoneSearch" placeholder="918887776666" /> \
-					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchEmail();"><span class="icon icon-search"></span> Go</a>\
+					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchPhone();"><span class="icon icon-search"></span> Go</a>\
 				</li>\
 				<li class="table-view-cell"><input type="search" name="nameSearch" id="nameSearch" placeholder="John " /> \
-					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchEmail();"><span class="icon icon-search"></span> Go</a>\
-				</li>\
-			</ul>\
+					<a class="btn btn-positive" style="margin-top:-8px;" onclick="app.SearchName();"><span class="icon icon-search"></span> Go</a>\
+				</li>';
+
+				html+='			</ul>\
 				<div id="contactsList"></div>\
 			</div> \
 			';
 		$("#content").html(html);
 	},
+	sendToEmail:function(email){
+		alert(email);
+	},
+	sendToPhone: function(phone){
+		alert(phone);
+	},
 	SearchEmail:function(){
 			var email = $("#emailSearch").val();
-			alert(email);
 		  if ($("#contactsList").length == 1) {
 					var options = new ContactFindOptions();
 					options.filter = email;
 					options.multiple = true;
-					var filter = ["displayName", "name", "phoneNumbers", "emails"];
+					var filter = ["displayName", "name", "phoneNumbers", "emails", "photo"];
 					navigator.contacts.find(filter, onSuccessContact, onErrorContact, options);
     } 
 	},
+	SearchPhone:function(){
+			var phone = $("#phoneSearch").val();
+		  if ($("#contactsList").length == 1) {
+					var options = new ContactFindOptions();
+					options.filter = phone;
+					options.multiple = true;
+					var filter = ["displayName", "name", "phoneNumbers", "emails", "photo"];
+					navigator.contacts.find(filter, onSuccessContact, onErrorContact, options);
+    } 
+	},
+	SearchName:function(){
+			var name = $("#nameSearch").val();
+		  if ($("#contactsList").length == 1) {
+					var options = new ContactFindOptions();
+					options.filter = name;
+					options.multiple = true;
+					var filter = ["displayName", "name", "phoneNumbers", "emails", "photo"];
+					navigator.contacts.find(filter, onSuccessContact, onErrorContact, options);
+    } 
+	},
+
 	send: function(){
 		html = '<div class="content-padded"> \
 			<h1>Send</h1> \
@@ -471,31 +497,33 @@ var app = { // Application Constructor
 function onSuccessContact(contacts) {
     var html = "";
     for (var i = 0; i < contacts.length; i++) {
-        if ($.trim(contacts[i].displayName).length != 0 || $.trim(contacts[i].nickName).length != 0) {
-            html += '<li>';
-            html += '<h2>' + contacts[i].displayName ? contacts[i].displayName : contacts[i].nickName + '</h2>';
-            if (contacts[i].phoneNumbers) {
-                html += '<ul class="innerlsv" data-role="listview" data-inset="true">';
-                html += '<li><h3>Phone Numbers</h3></li>';
-                for (var j = 0; j < contacts[i].phoneNumbers.length; j++) {
-                    html += "<li>Type: " + contacts[i].phoneNumbers[j].type + "<br/>" +
-                        "Value: " + contacts[i].phoneNumbers[j].value + "<br/>" +
-                        "Preferred: " + contacts[i].phoneNumbers[j].pref + "</li>";
-                }
-                html += "</ul>";
-            }
-												if (contacts[i].emails) {
-                html += '<ul class="innerlsv" data-role="listview" data-inset="true">';
-                html += '<li><h3>Emails</h3></li>';
-                for (var j = 0; j < contacts[i].emails.length; j++) {
-                    html += "<li>Type: " + contacts[i].emails[j].type + "<br/>" +
-                        "Value: " + contacts[i].emails[j].value + "<br/>" +
-                        "Preferred: " + contacts[i].emails[j].pref + "</li>";
-                }
-                html += "</ul>";
-            }
-            html += '</li>';
-        }
+     if ($.trim(contacts[i].displayName).length != 0 || $.trim(contacts[i].nickName).length != 0) {
+						html += '<li>';
+						html += '<ul class="table-view">';
+						html += '<li class="table-view-cell">';
+						html += '<span>';
+						if (contacts[i].photos) {
+							for (var j=0; j<contacts[i].photos.length; j++) {
+								html += '<img class="media-object pull-left" src="'+contants[i].photo[j].value+'">';
+							}
+						}else{
+							html += '<img class="media-object pull-left" src=""';
+				}
+				html += '<div >';
+				html += contacts[i].displayName ? contacts[i].displayName : contacts[i].nickName;
+					if (contacts[i].emails) {
+						for (var j = 0; j < contacts[i].emails.length; j++) {
+						html += '<p>Email:&nbsp;&nbsp; <a style="font-size:small" onclick="app.sendToEmail(this.name)" name="'+contacts[i].emails[j].value+'">'+contacts[i].emails[j].value+'</a></p>';
+						}
+					}
+					if (contacts[i].phoneNumbers) {
+						for (var j = 0; j < contacts[i].phoneNumbers.length; j++) {
+							html += '<p>Phone: <a style="font-size:small" onclick="app.sendToPhone(this.name)" name="'+contacts[i].phoneNumbers[j].value+'">'+contacts[i].phoneNumbers[j].value+'</a></p>';
+						}
+					}
+			html += '</span>';
+			html += '</li>';
+     }
     }
     if (contacts.length === 0) {
         html = '<li data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false">';

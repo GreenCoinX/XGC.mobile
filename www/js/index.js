@@ -128,7 +128,7 @@ var app = { // Application Constructor
 								htmlx += 'Send to: '+email;
 								htmlx += ', phone: '+phone;
 								htmlx += ', at GreenCoinX address '+GreenCoinXaddress;
-								htmlx += ', to Country: '+country+ ' IP: ' + ip + ' registered on '+ DateTime;
+								htmlx += ', to Country: '+country+ ', IP: ' + ip + ', registered on '+ DateTime;
 								htmlx += ', ExtraInfo: '+extra;
 								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
 								$("#ResultEmail").html(htmlx);
@@ -181,7 +181,7 @@ var app = { // Application Constructor
 								htmlx += 'Send to: '+email;
 								htmlx += ', phone: '+phone;
 								htmlx += ', at GreenCoinX address '+GreenCoinXaddress;
-								htmlx += ', to Country: '+country+ ' IP: ' + ip + ' registered on '+ DateTime;
+								htmlx += ', to Country: '+country+ ', IP: ' + ip + ', registered on '+ DateTime;
 								htmlx += ', ExtraInfo: '+extra;
 								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
 								$("#ResultPhone").html(htmlx);
@@ -200,7 +200,17 @@ var app = { // Application Constructor
 			alert(GreenCoinXaddress);
 	},
 	sendToAddress: function(){
-		alert("Send to address");
+		html = '<div class="content-padded"> \
+			<h1>Send to GreenCoinX address</h1> \
+			<form>\
+			<input type="search" name="sendXGCaddress" id="sendXGCaddress" placeholder="" value=""/>\
+			<p>Enter the phone number of the receiving GreenCoinX from you. Include only numbers starting with international code [918887776666] where 91 is country code for international dialing.</p>\
+			<a href="#" onclick="app.SearchThisPhone();" class="btn btn-positive btn-block">I<u>s</u> the phone registered?</a> \
+			</form>\
+			<div id="ResultPhone"></div>\
+			</div> \
+			';
+			$("#content").html(html);
 	},
 	SearchEmail:function(){
 			var email = $("#emailSearch").val();

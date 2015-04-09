@@ -502,13 +502,13 @@ function onSuccessContact(contacts) {
 						html += '<ul class="table-view">';
 						html += '<li class="table-view-cell">';
 						html += '<span>';
-						if (contacts[i].photos) {
-							for (var j=0; j<contacts[i].photos.length; j++) {
-								html += '<img class="media-object pull-left" src="'+contants[i].photo[j].value+'">';
-							}
-						}else{
-							html += '<img class="media-object pull-left" src=""';
-				}
+//						if (contacts[i].photos) {
+//							for (var j=0; j<contacts[i].photos.length; j++) {
+//								html += '<img class="media-object pull-left" src="'+contants[i].photo[j].value+'">';
+//							}
+//						}else{
+//							html += '<img class="media-object pull-left" src=""';
+//						}
 				html += '<div >';
 				html += contacts[i].displayName ? contacts[i].displayName : contacts[i].nickName;
 					if (contacts[i].emails) {

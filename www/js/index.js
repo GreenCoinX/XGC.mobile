@@ -199,6 +199,9 @@ var app = { // Application Constructor
 	SendCoins: function(GreenCoinXaddress){
 			alert(GreenCoinXaddress);
 	},
+	sendToAddress: function(){
+		alert("Send to address");
+	},
 	SearchEmail:function(){
 			var email = $("#emailSearch").val();
 		  if ($("#contactsList").length == 1) {

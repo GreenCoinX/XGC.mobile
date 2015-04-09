@@ -91,10 +91,113 @@ var app = { // Application Constructor
 		$("#content").html(html);
 	},
 	sendToEmail:function(email){
-		alert(email);
+		if(!email){var email="";}
+		html = '<div class="content-padded"> \
+			<h1>Send to Email</h1> \
+			<form>\
+			<input type="search" name="emailThisSearch" id="emailThisSearch" placeholder="name@email.com" value="'+email+'"/>\
+			<p>Enter the email address of the receiving GreenCoinX from you. </p>\
+			<a href="#" onclick="app.SearchThisEmail();" class="btn btn-positive btn-block">I<u>s</u> the email registered?</a> \
+			</form>\
+				<div id="ResultEmail"></div>\
+			</div> \
+			';
+			$("#content").html(html);
+	},
+	SearchThisEmail: function(){
+			var htmlx = '';
+			var email = $("#emailThisSearch").val();
+		
+				var  myURL = "http://hitarth.org/search/email/"+email;
+		  $.ajax({
+     url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+					myURL
+					+'"&format=json&callback=',
+					type: 'GET',
+					dataType: 'json',
+					success: function(data){
+						if(data['query']['results']['json']['success']=="1"){
+								var phone = data['query']['results']['json']['phone'];
+								var GreenCoinXaddress = data['query']['results']['json']['address'];
+								var ip = data['query']['results']['json']['ip'];
+								var country = data['query']['results']['json']['country'];
+								var city = data['query']['results']['json']['city'];
+								var DateTime = data['query']['results']['json']['DateTime'];
+								var extra = data['query']['results']['json']['extra'];
+								htmlx = '';
+								htmlx += 'Send to: '+email;
+								htmlx += ', phone: '+phone;
+								htmlx += ', at GreenCoinX address '+GreenCoinXaddress;
+								htmlx += ', to Country: '+country+ ' IP: ' + ip + ' registered on '+ DateTime;
+								htmlx += ', ExtraInfo: '+extra;
+								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
+								$("#ResultEmail").html(htmlx);
+						}else{
+							htmlx ='<h3 style="color:red">The email '+email+' is not registered with GreenCoinX.</h3>';
+							$("#ResultEmail").html(htmlx);
+						}
+					},
+						error: function(data){
+							console.log(data);
+						}
+				});
+				return false;
 	},
 	sendToPhone: function(phone){
-		alert(phone);
+		if(!phone){var phone="";}
+		html = '<div class="content-padded"> \
+			<h1>Send to Phone</h1> \
+			<form>\
+			<input type="search" name="phoneThisSearch" id="phoneThisSearch" placeholder="918887776666" value="'+phone+'"/>\
+			<p>Enter the phone number of the receiving GreenCoinX from you. Include only numbers starting with international code [918887776666] where 91 is country code for international dialing.</p>\
+			<a href="#" onclick="app.SearchThisPhone();" class="btn btn-positive btn-block">I<u>s</u> the phone registered?</a> \
+			</form>\
+			<div id="ResultPhone"></div>\
+			</div> \
+			';
+			$("#content").html(html);
+	},
+	SearchThisPhone: function(){
+			var htmlx = '';
+			var phone = $("#phoneThisSearch").val();
+		
+				var  myURL = "http://hitarth.org/search/phoneno/"+phone;
+		  $.ajax({
+     url: 'http://query.yahooapis.com/v1/public/yql?q=select * from json where url="'+
+					myURL
+					+'"&format=json&callback=',
+					type: 'GET',
+					dataType: 'json',
+					success: function(data){
+						if(data['query']['results']['json']['success']=="1"){
+								var email = data['query']['results']['json']['email'];
+ 							var GreenCoinXaddress = data['query']['results']['json']['address'];
+								var ip = data['query']['results']['json']['ip'];
+								var country = data['query']['results']['json']['country'];
+								var city = data['query']['results']['json']['city'];
+								var DateTime = data['query']['results']['json']['DateTime'];
+								var extra = data['query']['results']['json']['extra'];
+								htmlx = '';
+								htmlx += 'Send to: '+email;
+								htmlx += ', phone: '+phone;
+								htmlx += ', at GreenCoinX address '+GreenCoinXaddress;
+								htmlx += ', to Country: '+country+ ' IP: ' + ip + ' registered on '+ DateTime;
+								htmlx += ', ExtraInfo: '+extra;
+								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
+								$("#ResultPhone").html(htmlx);
+						}else{
+							htmlx ='<h3 style="color:red">The phone '+phone+' is not registered with GreenCoinX.</h3>';
+							$("#ResultPhone").html(htmlx);
+						}
+					},
+						error: function(data){
+							console.log(data);
+						}
+				});
+				return false;
+	},
+	SendCoins: function(GreenCoinXaddress){
+			alert(GreenCoinXaddress);
 	},
 	SearchEmail:function(){
 			var email = $("#emailSearch").val();
@@ -130,9 +233,14 @@ var app = { // Application Constructor
 	send: function(){
 		html = '<div class="content-padded"> \
 			<h1>Send</h1> \
+			<a href="#" class="btn btn-outlined btn-block" onclick="app.sendToEmail();">Send to Email</a> \
+			<p>Send GreenCoinX to an email address</p>\
+			<a href="#" class="btn btn-outlined btn-block" onclick="app.sendToPhone();">Send to Phone</a> \
+			<p>Send GreenCoinX to a phone / mobile number</p>\
+			<a href="#" class="btn btn-outlined btn-block" onclick="app.sendToAddress();">Send to GreenCoinX address</a> \
+			<p>Send GreenCoinX to an address</p>\
 			</div> \
 			';
-
 			$("#content").html(html);
 	},
 	receive: function(){
@@ -498,19 +606,20 @@ function onSuccessContact(contacts) {
     var html = "";
     for (var i = 0; i < contacts.length; i++) {
      if ($.trim(contacts[i].displayName).length != 0 || $.trim(contacts[i].nickName).length != 0) {
-						html += '<li>';
+					
 						html += '<ul class="table-view">';
 						html += '<li class="table-view-cell">';
-						html += '<span>';
+						html += '<div>';
+						html += contacts[i].displayName ? contacts[i].displayName : contacts[i].nickName;
 //						if (contacts[i].photos) {
 //							for (var j=0; j<contacts[i].photos.length; j++) {
+//								html += '<span>';
 //								html += '<img class="media-object pull-left" src="'+contants[i].photo[j].value+'">';
+//								html += '</span>';
 //							}
 //						}else{
 //							html += '<img class="media-object pull-left" src=""';
 //						}
-				html += '<div >';
-				html += contacts[i].displayName ? contacts[i].displayName : contacts[i].nickName;
 					if (contacts[i].emails) {
 						for (var j = 0; j < contacts[i].emails.length; j++) {
 						html += '<p>Email:&nbsp;&nbsp; <a style="font-size:small" onclick="app.sendToEmail(this.name)" name="'+contacts[i].emails[j].value+'">'+contacts[i].emails[j].value+'</a></p>';
@@ -521,8 +630,8 @@ function onSuccessContact(contacts) {
 							html += '<p>Phone: <a style="font-size:small" onclick="app.sendToPhone(this.name)" name="'+contacts[i].phoneNumbers[j].value+'">'+contacts[i].phoneNumbers[j].value+'</a></p>';
 						}
 					}
-			html += '</span>';
-			html += '</li>';
+					html += '</div>';
+					html += '</li>';
      }
     }
     if (contacts.length === 0) {
@@ -531,6 +640,9 @@ function onSuccessContact(contacts) {
         html += '<label>No Contacts Listed</label>';
         html += '</li>';
     }
+				html += '</ul>';
+				html += '<p>&nbsp;</p>';
+				html += '<p>&nbsp;</p>';
     $("#contactsList").html(html);
     $("#contactsList").listview().listview('refresh');
     $(".innerlsv").listview().listview('refresh');

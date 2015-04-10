@@ -126,10 +126,10 @@ var app = { // Application Constructor
 								var extra = data['query']['results']['json']['extra'];
 								htmlx = '';
 								htmlx += 'Send to: '+email;
-								htmlx += ', phone: '+phone;
-								htmlx += ', at GreenCoinX address '+GreenCoinXaddress;
-								htmlx += ', to Country: '+country+ ', IP: ' + ip + ', registered on '+ DateTime;
-								htmlx += ', ExtraInfo: '+extra;
+								htmlx += '<br>Phone: '+phone;
+								htmlx += '<br>GreenCoinX address '+GreenCoinXaddress;
+								htmlx += '<br>Country: '+country+ ', IP: ' + ip + '<br>Registered on '+ DateTime;
+								htmlx += '<br>Extra Info: '+extra;
 								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
 								$("#ResultEmail").html(htmlx);
 						}else{
@@ -179,10 +179,10 @@ var app = { // Application Constructor
 								var extra = data['query']['results']['json']['extra'];
 								htmlx = '';
 								htmlx += 'Send to: '+email;
-								htmlx += ', phone: '+phone;
-								htmlx += ', at GreenCoinX address '+GreenCoinXaddress;
-								htmlx += ', to Country: '+country+ ', IP: ' + ip + ', registered on '+ DateTime;
-								htmlx += ', ExtraInfo: '+extra;
+								htmlx += '<br>Phone: '+phone;
+								htmlx += '<br>GreenCoinX address '+GreenCoinXaddress;
+								htmlx += '<br>Country: '+country+ ', IP: ' + ip + '<br>Registered on '+ DateTime;
+								htmlx += '<br>Extra Info: '+extra;
 								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
 								$("#ResultPhone").html(htmlx);
 						}else{

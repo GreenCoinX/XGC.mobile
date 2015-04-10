@@ -26,7 +26,20 @@ function readDB(){
 		for(var i=0; i<rowsArray.length; i++){
 			var id = rowsArray[i].id;
 			var address = rowsArray[i].address;
+			// qrcode
+			var qrCode = qr_code.qrcode(3, 'L');
+//			var address = $(this).attr('data-address');
+			var text = address.replace(/^[\s\u3000]+|[\s\u3000]+$/g, '');
+			qrCode.addData(text);
+			qrCode.make();
+			//$('#braincontrol #step-qr-accounts .qr_code_title').text(address);
+			//$('#braincontrol #step-qr-accounts .qr_code').html(qrCode.createImgTag(4));
+
+			// qrcode
+			
+			
 			xhtml += '<li class="table-view-cell"><code><a href="#" data-id="' + id + '" onclick="app.ShowDetails(this);" data-name="' + address + '">' + address + '</a></code></li>';
+			xhtml += '<li class="table-view-cell">'+qrCode.createImgTag(4)+'</li>';
 		}
 		$("#XGCAddresses").append(xhtml);	
 	}, catchError);

@@ -127,7 +127,7 @@ var app = { // Application Constructor
 								htmlx = '';
 								htmlx += 'Send to: '+email;
 								htmlx += '<br>Phone: '+phone;
-								htmlx += '<br>GreenCoinX address '+GreenCoinXaddress;
+								htmlx += '<br>GreenCoinX address: '+GreenCoinXaddress;
 								htmlx += '<br>Country: '+country+ ', IP: ' + ip + '<br>Registered on '+ DateTime;
 								htmlx += '<br>Extra Info: '+extra;
 								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
@@ -180,7 +180,7 @@ var app = { // Application Constructor
 								htmlx = '';
 								htmlx += 'Send to: '+email;
 								htmlx += '<br>Phone: '+phone;
-								htmlx += '<br>GreenCoinX address '+GreenCoinXaddress;
+								htmlx += '<br>GreenCoinX address: '+GreenCoinXaddress;
 								htmlx += '<br>Country: '+country+ ', IP: ' + ip + '<br>Registered on '+ DateTime;
 								htmlx += '<br>Extra Info: '+extra;
 								htmlx += '<br><a href="#" onclick="app.SendCoins(this.name);" class="btn btn-positive btn-block" name="'+GreenCoinXaddress+'">Send GreenCoinX</a>';
@@ -257,11 +257,25 @@ var app = { // Application Constructor
 			$("#content").html(html);
 	},
 	receive: function(){
-			html = '<div class="content-padded"> \
+			email = localStorage[storage+".settings.email"];
+			phone = localStorage[storage+".settings.phoneNumber"];
+
+		html = '<div class="content-padded"> \
 			<h1>Receive</h1> \
+			<h3>Just give your email, phone or GreenCoinX address to receive coins.</h3>\
+				<ul class="table-view" id="XGCAddresses"> \
+					<li class="table-view-cell table-view-divider">Your GreenCoinX accounts</li>';
+			if(email === undefined || email === null){
+				html += '<li class="table-view-cell" ><h4>Your wallet is unidentified!</h4></li>';
+				html += '<li class="table-view-cell" ><h5>Click on Settings -> Identification and verify your email and phone to use GreenCoinX.</h5></li>';
+			}else{
+				html +=	'<li class="table-view-cell table-view-divider">Email: '+email+'</li> \
+					<li class="table-view-cell table-view-divider">Phone: '+phone+'</li>';
+			}
+				html+= '</ul></div> \
 			</div> \
 			';
-
+			readDB();
 			$("#content").html(html);
 	},
 	settings: function(){

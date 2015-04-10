@@ -27,6 +27,7 @@ function readDB(){
 			var id = rowsArray[i].id;
 			var address = rowsArray[i].address;
 			// qrcode
+			var qrCode = qr_code.qrcode(7, 'L');
 //			var address = $(this).attr('data-address');
 			var text = address.replace(/^[\s\u3000]+|[\s\u3000]+$/g, '');
 			qrCode.addData(text);
